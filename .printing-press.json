@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "api_name": "mt5-backtester",
+  "display_name": "MT5 Backtester",
+  "cli_name": "pp-mt5-backtester",
+  "owner": "mvanhorn",
+  "printer": "mvanhorn",
+  "printer_name": "Matt Van Horn",
+  "spec_format": "internal",
+  "auth_type": "none",
+  "novel_features": [
+    {
+      "name": "Headless backtest runner",
+      "command": "pp-mt5-backtester run",
+      "description": "Generates the MT5 strategy-tester .ini file, launches terminal64.exe in shutdown-after-test mode, then locates and parses the HTML report. No Strategy Tester UI involvement."
+    },
+    {
+      "name": "Batch test grid",
+      "command": "pp-mt5-backtester batch --file batch.json",
+      "description": "Run many EAs across many symbols/timeframes/inputs sequentially with defaults+overrides, ranked output, top-performer summary."
+    },
+    {
+      "name": "Set file support",
+      "command": "pp-mt5-backtester setfile show|export|list",
+      "description": "Parse/write MT5 .set files preserving optimization ranges (value||start||step||stop||Y/N); apply per-run --input overrides without losing the range."
+    },
+    {
+      "name": "Named terminal profiles",
+      "command": "pp-mt5-backtester profile add|use|list",
+      "description": "Manage multiple MT5 terminals (different brokers, portable installs) and switch between them per backtest with --profile."
+    },
+    {
+      "name": "MQL5 compiler wrapper",
+      "command": "pp-mt5-backtester compile",
+      "description": "Invokes metaeditor64.exe to produce .ex5 from .mq5 sources with custom include paths."
+    },
+    {
+      "name": "Report parser",
+      "command": "pp-mt5-backtester report",
+      "description": "Parse MT5 HTML strategy tester reports into text/JSON/CSV: net profit, profit factor, Sharpe, drawdown, win rate, trade count."
+    }
+  ]
+}
