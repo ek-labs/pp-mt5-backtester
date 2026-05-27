@@ -1,4 +1,4 @@
-module github.com/mvanhorn/printing-press-library/library/finance/mt5-backtester
+module github.com/ek-labs/pp-mt5-backtester
 
 // Internal packages:
 //   internal/config   - INI generation, path detection

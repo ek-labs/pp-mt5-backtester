@@ -15,10 +15,8 @@ Compile MQL5 source files. Parse and compare reports. Batch test across symbols 
 # 1. Install Go if not present
 winget install GoLang.Go
 
-# 2. Clone and build
-git clone https://github.com/mvanhorn/printing-press-library
-cd printing-press-library\library\finance\mt5-backtester
-go install ./cmd/pp-mt5-backtester
+# 2. Install via go
+go install github.com/ek-labs/pp-mt5-backtester/cmd/pp-mt5-backtester@latest
 
 # 3. Set your MT5 path once
 $env:MT5_PATH = "C:\Program Files\MetaTrader 5"
@@ -28,9 +26,9 @@ $env:MT5_PATH = "C:\Program Files\MetaTrader 5"
 ### Build from source
 
 ```powershell
-git clone https://github.com/mvanhorn/printing-press-library
-cd printing-press-library\library\finance\mt5-backtester
-go build -o pp-mt5.exe ./cmd/pp-mt5-backtester
+git clone https://github.com/ek-labs/pp-mt5-backtester
+cd pp-mt5-backtester
+go build -o pp-mt5-backtester.exe ./cmd/pp-mt5-backtester
 ```
 
 ---

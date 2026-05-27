@@ -9,7 +9,7 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/mvanhorn/printing-press-library/library/finance/mt5-backtester/internal/setfile"
+	"github.com/ek-labs/pp-mt5-backtester/internal/setfile"
 )
 
 // MT5Config holds all paths and connection info for the MT5 installation.

@@ -9,10 +9,10 @@ import (
 	"text/tabwriter"
 	"time"
 
-	"github.com/mvanhorn/printing-press-library/library/finance/mt5-backtester/internal/backtest"
-	"github.com/mvanhorn/printing-press-library/library/finance/mt5-backtester/internal/config"
-	"github.com/mvanhorn/printing-press-library/library/finance/mt5-backtester/internal/report"
-	"github.com/mvanhorn/printing-press-library/library/finance/mt5-backtester/internal/setfile"
+	"github.com/ek-labs/pp-mt5-backtester/internal/backtest"
+	"github.com/ek-labs/pp-mt5-backtester/internal/config"
+	"github.com/ek-labs/pp-mt5-backtester/internal/report"
+	"github.com/ek-labs/pp-mt5-backtester/internal/setfile"
 )
 
 // ── Job definition ────────────────────────────────────────────────────────────

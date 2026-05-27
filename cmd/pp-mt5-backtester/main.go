@@ -10,13 +10,13 @@ import (
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 
-	"github.com/mvanhorn/printing-press-library/library/finance/mt5-backtester/internal/backtest"
-	"github.com/mvanhorn/printing-press-library/library/finance/mt5-backtester/internal/batch"
-	"github.com/mvanhorn/printing-press-library/library/finance/mt5-backtester/internal/compile"
-	"github.com/mvanhorn/printing-press-library/library/finance/mt5-backtester/internal/config"
-	"github.com/mvanhorn/printing-press-library/library/finance/mt5-backtester/internal/profiles"
-	"github.com/mvanhorn/printing-press-library/library/finance/mt5-backtester/internal/report"
-	"github.com/mvanhorn/printing-press-library/library/finance/mt5-backtester/internal/setfile"
+	"github.com/ek-labs/pp-mt5-backtester/internal/backtest"
+	"github.com/ek-labs/pp-mt5-backtester/internal/batch"
+	"github.com/ek-labs/pp-mt5-backtester/internal/compile"
+	"github.com/ek-labs/pp-mt5-backtester/internal/config"
+	"github.com/ek-labs/pp-mt5-backtester/internal/profiles"
+	"github.com/ek-labs/pp-mt5-backtester/internal/report"
+	"github.com/ek-labs/pp-mt5-backtester/internal/setfile"
 )
 
 var (

@@ -13,7 +13,7 @@ metadata:
     install:
       - kind: go
         bins: [pp-mt5-backtester]
-        module: github.com/mvanhorn/printing-press-library/library/finance/mt5-backtester/cmd/pp-mt5-backtester
+        module: github.com/ek-labs/pp-mt5-backtester/cmd/pp-mt5-backtester
 ---
 
 # MT5 Backtester — Printing Press CLI
@@ -23,7 +23,7 @@ metadata:
 This skill drives the `pp-mt5-backtester` binary. **Verify the CLI is installed before invoking any command from this skill.** If missing:
 
 ```bash
-go install github.com/mvanhorn/printing-press-library/library/finance/mt5-backtester/cmd/pp-mt5-backtester@latest
+go install github.com/ek-labs/pp-mt5-backtester/cmd/pp-mt5-backtester@latest
 ```
 
 Then verify: `pp-mt5-backtester --version`. Ensure `$(go env GOPATH)\bin` (Windows: `%USERPROFILE%\go\bin`) is on `PATH`.
