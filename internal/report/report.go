@@ -14,22 +14,22 @@ import (
 // Stats holds all key metrics from a backtest report.
 type Stats struct {
 	// Identity
-	Expert    string
-	Symbol    string
-	Period    string
-	FromDate  string
-	ToDate    string
-	Model     string
-	Deposit   float64
-	Currency  string
+	Expert   string
+	Symbol   string
+	Period   string
+	FromDate string
+	ToDate   string
+	Model    string
+	Deposit  float64
+	Currency string
 
 	// Core results
-	NetProfit       float64
-	GrossProfit     float64
-	GrossLoss       float64
-	ProfitFactor    float64
-	ExpectedPayoff  float64
-	SharpeRatio     float64
+	NetProfit      float64
+	GrossProfit    float64
+	GrossLoss      float64
+	ProfitFactor   float64
+	ExpectedPayoff float64
+	SharpeRatio    float64
 
 	// Drawdown
 	AbsoluteDrawdown float64
@@ -38,18 +38,18 @@ type Stats struct {
 	RelativeDrawdown float64
 
 	// Trade stats
-	TotalTrades    int
-	ShortTrades    int
-	LongTrades     int
-	ProfitTrades   int
-	LossTrades     int
-	LargestWin     float64
-	LargestLoss    float64
-	AvgWin         float64
-	AvgLoss        float64
-	MaxConsecWins  int
-	MaxConsecLoss  int
-	WinRate        float64
+	TotalTrades   int
+	ShortTrades   int
+	LongTrades    int
+	ProfitTrades  int
+	LossTrades    int
+	LargestWin    float64
+	LargestLoss   float64
+	AvgWin        float64
+	AvgLoss       float64
+	MaxConsecWins int
+	MaxConsecLoss int
+	WinRate       float64
 
 	// Balance
 	InitialDeposit float64
@@ -57,10 +57,10 @@ type Stats struct {
 	ReturnPct      float64
 
 	// Quality
-	Bars           int
-	Ticks          int
-	ModelQuality   string
-	ParsedAt       time.Time
+	Bars         int
+	Ticks        int
+	ModelQuality string
+	ParsedAt     time.Time
 }
 
 var (
@@ -85,7 +85,7 @@ var (
 	reMaxConsecWins  = regexp.MustCompile(`(?i)maximum consecutive wins[^<]*<[^>]+>(\d+)`)
 	reMaxConsecLoss  = regexp.MustCompile(`(?i)maximum consecutive losses[^<]*<[^>]+>(\d+)`)
 	reInitDeposit    = regexp.MustCompile(`(?i)initial deposit[^<]*<[^>]+>([^<]+)`)
-	reFinalBalance   = regexp.MustCompile(`(?i)final balance[^<]*<[^>]+>([^<]+)`) 
+	reFinalBalance   = regexp.MustCompile(`(?i)final balance[^<]*<[^>]+>([^<]+)`)
 	reExpert         = regexp.MustCompile(`(?i)expert:\s*<[^>]+>([^<]+)`)
 	reSymbol         = regexp.MustCompile(`(?i)symbol:\s*<[^>]+>([^<]+)`)
 	rePeriod         = regexp.MustCompile(`(?i)period:\s*<[^>]+>([^<]+)`)
@@ -282,11 +282,37 @@ func PrintCSVRow(s *Stats) {
 }
 
 // helpers
+
+// cleanNumber normalizes an MT5 report numeric cell for strconv parsing.
+// Reports can be locale-formatted: "1,234.56", "1 234.56", or "1 234,56"
+// (decimal comma). Spaces/NBSPs are always thousands separators; when both
+// '.' and ',' appear, the rightmost is the decimal separator; a lone comma is
+// a decimal separator unless it is followed by exactly three digits (the
+// English thousands pattern "1,234").
 func cleanNumber(s string) string {
 	s = stripTags(s)
-	s = strings.ReplaceAll(s, ",", "")
-	s = strings.ReplaceAll(s, " ", "")
 	s = strings.TrimSpace(s)
+	s = strings.ReplaceAll(s, "\u00a0", "")
+	s = strings.ReplaceAll(s, " ", "")
+	lastDot := strings.LastIndexByte(s, '.')
+	lastComma := strings.LastIndexByte(s, ',')
+	switch {
+	case lastComma == -1:
+		// No commas: nothing to disambiguate.
+	case lastDot > lastComma:
+		// "1,234.56" — commas are thousands separators.
+		s = strings.ReplaceAll(s, ",", "")
+	case lastDot != -1:
+		// "1.234,56" — dots are thousands separators, comma is decimal.
+		s = strings.ReplaceAll(s, ".", "")
+		s = strings.Replace(s, ",", ".", 1)
+	case strings.Count(s, ",") == 1 && len(s)-lastComma-1 != 3:
+		// "1234,56" — decimal comma.
+		s = strings.Replace(s, ",", ".", 1)
+	default:
+		// "1,234" / "1,234,567" — thousands commas.
+		s = strings.ReplaceAll(s, ",", "")
+	}
 	return s
 }
 

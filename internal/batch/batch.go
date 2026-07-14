@@ -19,19 +19,19 @@ import (
 
 // Job defines one backtest item. Every field except EA is optional with sensible defaults.
 type Job struct {
-	EA      string  `json:"ea"`
-	Symbol  string  `json:"symbol,omitempty"`
-	Period  string  `json:"period,omitempty"`
-	From    string  `json:"from,omitempty"`
-	To      string  `json:"to,omitempty"`
-	Model   *int    `json:"model,omitempty"`
-	Deposit float64 `json:"deposit,omitempty"`
-	Currency string `json:"currency,omitempty"`
-	Leverage int    `json:"leverage,omitempty"`
-	Profile string  `json:"profile,omitempty"`
-	Inputs  map[string]string `json:"inputs,omitempty"`
-	SetFile string  `json:"set_file,omitempty"`
-	Label   string `json:"label,omitempty"`
+	EA       string            `json:"ea"`
+	Symbol   string            `json:"symbol,omitempty"`
+	Period   string            `json:"period,omitempty"`
+	From     string            `json:"from,omitempty"`
+	To       string            `json:"to,omitempty"`
+	Model    *int              `json:"model,omitempty"`
+	Deposit  float64           `json:"deposit,omitempty"`
+	Currency string            `json:"currency,omitempty"`
+	Leverage int               `json:"leverage,omitempty"`
+	Profile  string            `json:"profile,omitempty"`
+	Inputs   map[string]string `json:"inputs,omitempty"`
+	SetFile  string            `json:"set_file,omitempty"`
+	Label    string            `json:"label,omitempty"`
 }
 
 // Defaults holds batch-level defaults applied to every job.
@@ -57,39 +57,83 @@ type BatchFile struct {
 
 // Resolve merges job fields with defaults.
 func (j Job) Resolve(d Defaults) Job {
-	if j.Symbol == ""   { j.Symbol = d.Symbol }
-	if j.Period == ""   { j.Period = d.Period }
-	if j.From == ""     { j.From = d.From }
-	if j.To == ""       { j.To = d.To }
-	if j.Model == nil   { m := d.Model; j.Model = &m }
-	if j.Deposit == 0   { j.Deposit = d.Deposit }
-	if j.Currency == "" { j.Currency = d.Currency }
-	if j.Leverage == 0  { j.Leverage = d.Leverage }
-	if j.Profile == ""  { j.Profile = d.Profile }
-	if j.SetFile == ""  { j.SetFile = d.SetFile }
+	if j.Symbol == "" {
+		j.Symbol = d.Symbol
+	}
+	if j.Period == "" {
+		j.Period = d.Period
+	}
+	if j.From == "" {
+		j.From = d.From
+	}
+	if j.To == "" {
+		j.To = d.To
+	}
+	if j.Model == nil {
+		m := d.Model
+		j.Model = &m
+	}
+	if j.Deposit == 0 {
+		j.Deposit = d.Deposit
+	}
+	if j.Currency == "" {
+		j.Currency = d.Currency
+	}
+	if j.Leverage == 0 {
+		j.Leverage = d.Leverage
+	}
+	if j.Profile == "" {
+		j.Profile = d.Profile
+	}
+	if j.SetFile == "" {
+		j.SetFile = d.SetFile
+	}
 
 	// Merge inputs: defaults first, job inputs override
 	if len(d.Inputs) > 0 {
 		merged := make(map[string]string)
-		for k, v := range d.Inputs { merged[k] = v }
-		for k, v := range j.Inputs { merged[k] = v }
+		for k, v := range d.Inputs {
+			merged[k] = v
+		}
+		for k, v := range j.Inputs {
+			merged[k] = v
+		}
 		j.Inputs = merged
 	}
 
 	// Hardcoded fallbacks
-	if j.Symbol == ""   { j.Symbol = "EURUSD" }
-	if j.Period == ""   { j.Period = "H1" }
-	if j.Model == nil   { m := 1; j.Model = &m }
-	if j.Deposit == 0   { j.Deposit = 10000 }
-	if j.Currency == "" { j.Currency = "USD" }
-	if j.Leverage == 0  { j.Leverage = 100 }
-	if j.From == ""     { j.From = time.Now().AddDate(-1, 0, 0).Format("2006.01.02") }
-	if j.To == ""       { j.To = time.Now().Format("2006.01.02") }
+	if j.Symbol == "" {
+		j.Symbol = "EURUSD"
+	}
+	if j.Period == "" {
+		j.Period = "H1"
+	}
+	if j.Model == nil {
+		m := 1
+		j.Model = &m
+	}
+	if j.Deposit == 0 {
+		j.Deposit = 10000
+	}
+	if j.Currency == "" {
+		j.Currency = "USD"
+	}
+	if j.Leverage == 0 {
+		j.Leverage = 100
+	}
+	if j.From == "" {
+		j.From = time.Now().AddDate(-1, 0, 0).Format("2006.01.02")
+	}
+	if j.To == "" {
+		j.To = time.Now().Format("2006.01.02")
+	}
 	return j
 }
 
 func (j Job) displayLabel() string {
-	if j.Label != "" { return j.Label }
+	if j.Label != "" {
+		return j.Label
+	}
 	return fmt.Sprintf("%s | %s | %s", j.EA, j.Symbol, j.Period)
 }
 
@@ -132,7 +176,9 @@ func RunBatch(jobs []Job, defaults Defaults, workDir string, timeout time.Durati
 		}
 
 		model := 1
-		if job.Model != nil { model = *job.Model }
+		if job.Model != nil {
+			model = *job.Model
+		}
 
 		var setPath string
 		if job.SetFile != "" {
@@ -143,7 +189,9 @@ func RunBatch(jobs []Job, defaults Defaults, workDir string, timeout time.Durati
 				continue
 			}
 			setPath = resolved
-			if verbose { fmt.Printf("       set: %s\n", setPath) }
+			if verbose {
+				fmt.Printf("       set: %s\n", setPath)
+			}
 		}
 
 		params := &config.BacktestParams{
@@ -168,7 +216,9 @@ func RunBatch(jobs []Job, defaults Defaults, workDir string, timeout time.Durati
 			fmt.Printf("       ✗ ini error: %v\n", err)
 			continue
 		}
-		if verbose { fmt.Printf("       ini: %s\n", iniPath) }
+		if verbose {
+			fmt.Printf("       ini: %s\n", iniPath)
+		}
 
 		runResult := backtest.Run(backtest.RunOptions{
 			TerminalPath: termPath,
@@ -207,13 +257,21 @@ func RunBatch(jobs []Job, defaults Defaults, workDir string, timeout time.Durati
 
 func ExpandSymbols(base Job, symbols []string) []Job {
 	jobs := make([]Job, 0, len(symbols))
-	for _, sym := range symbols { j := base; j.Symbol = sym; jobs = append(jobs, j) }
+	for _, sym := range symbols {
+		j := base
+		j.Symbol = sym
+		jobs = append(jobs, j)
+	}
 	return jobs
 }
 
 func ExpandPeriods(base Job, periods []string) []Job {
 	jobs := make([]Job, 0, len(periods))
-	for _, p := range periods { j := base; j.Period = p; jobs = append(jobs, j) }
+	for _, p := range periods {
+		j := base
+		j.Period = p
+		jobs = append(jobs, j)
+	}
 	return jobs
 }
 
@@ -229,9 +287,13 @@ func ExpandEAs(eas []string, symbol, period, from, to string) []Job {
 
 func LoadBatchFile(path string) (*BatchFile, error) {
 	data, err := os.ReadFile(path)
-	if err != nil { return nil, fmt.Errorf("read batch file: %w", err) }
+	if err != nil {
+		return nil, fmt.Errorf("read batch file: %w", err)
+	}
 	var bf BatchFile
-	if err := json.Unmarshal(data, &bf); err != nil { return nil, fmt.Errorf("parse batch file: %w", err) }
+	if err := json.Unmarshal(data, &bf); err != nil {
+		return nil, fmt.Errorf("parse batch file: %w", err)
+	}
 	return &bf, nil
 }
 
@@ -239,7 +301,7 @@ func WriteBatchTemplate(path string) error {
 	model0 := 0
 	_ = model0
 	from := time.Now().AddDate(-1, 0, 0).Format("2006.01.02")
-	to   := time.Now().Format("2006.01.02")
+	to := time.Now().Format("2006.01.02")
 
 	example := BatchFile{
 		Defaults: Defaults{
@@ -257,8 +319,8 @@ func WriteBatchTemplate(path string) error {
 
 			// Same EA across multiple timeframes — period overrides default
 			{EA: "Moving Average", Period: "M15", Label: "MA - EUR/USD M15"},
-			{EA: "Moving Average", Period: "H4",  Label: "MA - EUR/USD H4"},
-			{EA: "Moving Average", Period: "D1",  Label: "MA - EUR/USD D1"},
+			{EA: "Moving Average", Period: "H4", Label: "MA - EUR/USD H4"},
+			{EA: "Moving Average", Period: "D1", Label: "MA - EUR/USD D1"},
 
 			// Custom EA with specific inputs and every-tick model
 			{
@@ -324,18 +386,24 @@ func PrintSummaryTable(results []JobResult) {
 
 	passed, failed := 0, 0
 	for _, r := range results {
-		if r.Error != nil || r.Stats == nil { failed++ } else { passed++ }
+		if r.Error != nil || r.Stats == nil {
+			failed++
+		} else {
+			passed++
+		}
 	}
 	fmt.Printf("\n%d completed, %d failed\n", passed, failed)
-	if passed > 1 { printBestPerformers(results) }
+	if passed > 1 {
+		printBestPerformers(results)
+	}
 }
 
 func PrintSummaryJSON(results []JobResult) {
 	type row struct {
-		Label   string  `json:"label"`
-		EA      string  `json:"ea"`
-		Symbol  string  `json:"symbol"`
-		Period  string  `json:"period"`
+		Label        string  `json:"label"`
+		EA           string  `json:"ea"`
+		Symbol       string  `json:"symbol"`
+		Period       string  `json:"period"`
 		NetProfit    float64 `json:"net_profit"`
 		ProfitFactor float64 `json:"profit_factor"`
 		Sharpe       float64 `json:"sharpe_ratio"`
@@ -373,7 +441,9 @@ func PrintSummaryJSON(results []JobResult) {
 func PrintSummaryCSV(results []JobResult) {
 	report.PrintCSVHeader()
 	for _, r := range results {
-		if r.Stats != nil { report.PrintCSVRow(r.Stats) }
+		if r.Stats != nil {
+			report.PrintCSVRow(r.Stats)
+		}
 	}
 }
 
@@ -385,7 +455,9 @@ func printJobTable(jobs []Job, defaults Defaults) {
 	for i, j := range jobs {
 		r := j.Resolve(defaults)
 		model := 1
-		if r.Model != nil { model = *r.Model }
+		if r.Model != nil {
+			model = *r.Model
+		}
 		fmt.Fprintf(w, "%d\t%s\t%s\t%s\t%d\t%s → %s\t%s\n",
 			i+1, r.EA, r.Symbol, r.Period, model, r.From, r.To, r.Profile)
 	}
@@ -394,35 +466,56 @@ func printJobTable(jobs []Job, defaults Defaults) {
 
 func printInlineResult(s *report.Stats) {
 	status := "PROFIT"
-	if s.NetProfit < 0 { status = "LOSS" }
+	if s.NetProfit < 0 {
+		status = "LOSS"
+	}
 	fmt.Printf("       ✓ %-6s  P&L: %+.2f  PF: %.2f  Sharpe: %.2f  MaxDD: %.1f%%  Trades: %d  Win: %.1f%%\n",
 		status, s.NetProfit, s.ProfitFactor, s.SharpeRatio,
 		s.MaxDrawdownPct, s.TotalTrades, s.WinRate)
 }
 
 func printBestPerformers(results []JobResult) {
-	type ranked struct{ label string; val float64 }
-	bestPF     := ranked{}
+	type ranked struct {
+		label string
+		val   float64
+	}
+	bestPF := ranked{}
 	bestReturn := ranked{}
 	bestSharpe := ranked{}
-	lowestDD   := ranked{val: 1e9}
+	lowestDD := ranked{val: 1e9}
 
 	for _, r := range results {
-		if r.Stats == nil { continue }
+		if r.Stats == nil {
+			continue
+		}
 		s := r.Stats
 		lbl := r.Job.displayLabel()
-		if s.ProfitFactor   > bestPF.val     { bestPF     = ranked{lbl, s.ProfitFactor} }
-		if s.ReturnPct      > bestReturn.val  { bestReturn = ranked{lbl, s.ReturnPct} }
-		if s.SharpeRatio    > bestSharpe.val  { bestSharpe = ranked{lbl, s.SharpeRatio} }
-		if s.MaxDrawdownPct < lowestDD.val    { lowestDD   = ranked{lbl, s.MaxDrawdownPct} }
+		if s.ProfitFactor > bestPF.val {
+			bestPF = ranked{lbl, s.ProfitFactor}
+		}
+		if s.ReturnPct > bestReturn.val {
+			bestReturn = ranked{lbl, s.ReturnPct}
+		}
+		if s.SharpeRatio > bestSharpe.val {
+			bestSharpe = ranked{lbl, s.SharpeRatio}
+		}
+		if s.MaxDrawdownPct < lowestDD.val {
+			lowestDD = ranked{lbl, s.MaxDrawdownPct}
+		}
 	}
 
 	fmt.Println("\n── Top performers ───────────────────────────────────────────────────")
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-	if bestPF.label     != "" { fmt.Fprintf(w, "Best Profit Factor:\t%s\t(%.2f)\n",  bestPF.label, bestPF.val) }
-	if bestReturn.label != "" { fmt.Fprintf(w, "Best Return:\t%s\t(%.1f%%)\n", bestReturn.label, bestReturn.val) }
-	if bestSharpe.label != "" { fmt.Fprintf(w, "Best Sharpe:\t%s\t(%.2f)\n",   bestSharpe.label, bestSharpe.val) }
-	if lowestDD.label   != "" && lowestDD.val < 1e9 {
+	if bestPF.label != "" {
+		fmt.Fprintf(w, "Best Profit Factor:\t%s\t(%.2f)\n", bestPF.label, bestPF.val)
+	}
+	if bestReturn.label != "" {
+		fmt.Fprintf(w, "Best Return:\t%s\t(%.1f%%)\n", bestReturn.label, bestReturn.val)
+	}
+	if bestSharpe.label != "" {
+		fmt.Fprintf(w, "Best Sharpe:\t%s\t(%.2f)\n", bestSharpe.label, bestSharpe.val)
+	}
+	if lowestDD.label != "" && lowestDD.val < 1e9 {
 		fmt.Fprintf(w, "Lowest Drawdown:\t%s\t(%.1f%%)\n", lowestDD.label, lowestDD.val)
 	}
 	w.Flush()
@@ -430,6 +523,8 @@ func printBestPerformers(results []JobResult) {
 }
 
 func truncate(s string, n int) string {
-	if len(s) <= n { return s }
+	if len(s) <= n {
+		return s
+	}
 	return s[:n-1] + "…"
 }

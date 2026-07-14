@@ -30,10 +30,10 @@ var (
 	verbose      bool
 	outputFmt    string
 
-	bold  = color.New(color.Bold).SprintFunc()
-	green = color.New(color.FgGreen).SprintFunc()
-	red   = color.New(color.FgRed).SprintFunc()
-	cyan  = color.New(color.FgCyan).SprintFunc()
+	bold   = color.New(color.Bold).SprintFunc()
+	green  = color.New(color.FgGreen).SprintFunc()
+	red    = color.New(color.FgRed).SprintFunc()
+	cyan   = color.New(color.FgCyan).SprintFunc()
 	yellow = color.New(color.FgYellow).SprintFunc()
 )
 
@@ -252,6 +252,7 @@ Examples:
 				ReportDir:    workDir,
 				Timeout:      timeout,
 				Portable:     isPortable,
+				KeepOpen:     noShutdown,
 				Verbose:      verbose,
 			})
 

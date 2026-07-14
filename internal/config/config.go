@@ -24,22 +24,22 @@ type MT5Config struct {
 
 // BacktestParams defines a single backtest run.
 type BacktestParams struct {
-	Expert       string  // EA name e.g. "Experts\\MyEA.ex5"
-	Symbol       string  // e.g. "EURUSD"
-	Period       string  // e.g. "H1", "M15", "D1"
-	FromDate     string  // e.g. "2023.01.01"
-	ToDate       string  // e.g. "2024.01.01"
-	Model        int     // 0=Every tick, 1=1min OHLC, 2=Open prices only, 4=Real ticks
-	Deposit      float64 // Starting deposit
-	Currency     string  // Deposit currency e.g. "USD"
-	Leverage     int     // e.g. 100
-	Optimization int     // 0=disabled, 1=slow complete, 2=genetic, 3=all symbols
-	ForwardMode  int     // 0=no forward, 1=1/2, 2=1/3, 3=1/4, 4=custom
-	ForwardDate  string  // Used when ForwardMode=4
-	Report       string  // Report filename (no extension)
-	ShutdownMode int     // 0=don't shutdown, 1=shutdown after test
+	Expert       string            // EA name e.g. "Experts\\MyEA.ex5"
+	Symbol       string            // e.g. "EURUSD"
+	Period       string            // e.g. "H1", "M15", "D1"
+	FromDate     string            // e.g. "2023.01.01"
+	ToDate       string            // e.g. "2024.01.01"
+	Model        int               // 0=Every tick, 1=1min OHLC, 2=Open prices only, 4=Real ticks
+	Deposit      float64           // Starting deposit
+	Currency     string            // Deposit currency e.g. "USD"
+	Leverage     int               // e.g. 100
+	Optimization int               // 0=disabled, 1=slow complete, 2=genetic, 3=all symbols
+	ForwardMode  int               // 0=no forward, 1=1/2, 2=1/3, 3=1/4, 4=custom
+	ForwardDate  string            // Used when ForwardMode=4
+	Report       string            // Report filename (no extension)
+	ShutdownMode int               // 0=don't shutdown, 1=shutdown after test
 	Inputs       map[string]string // EA input parameters (override SetFile values)
-	SetFile      string  // Absolute path to a .set file to seed [TesterInputs]
+	SetFile      string            // Absolute path to a .set file to seed [TesterInputs]
 }
 
 // ModelName returns human-readable tick model name.

@@ -12,12 +12,12 @@ import (
 // Profile holds configuration for one MT5 terminal instance.
 type Profile struct {
 	Name         string `json:"name"`
-	TerminalPath string `json:"terminal"`   // path to terminal64.exe
-	EditorPath   string `json:"editor"`     // path to metaeditor64.exe (auto-derived if empty)
-	DataPath     string `json:"data_path"`  // MT5 data dir (auto-derived if empty)
-	Portable     bool   `json:"portable"`   // pass /portable flag
-	Login        string `json:"login"`      // broker account number
-	Server       string `json:"server"`     // broker server
+	TerminalPath string `json:"terminal"`  // path to terminal64.exe
+	EditorPath   string `json:"editor"`    // path to metaeditor64.exe (auto-derived if empty)
+	DataPath     string `json:"data_path"` // MT5 data dir (auto-derived if empty)
+	Portable     bool   `json:"portable"`  // pass /portable flag
+	Login        string `json:"login"`     // broker account number
+	Server       string `json:"server"`    // broker server
 	Description  string `json:"description"`
 }
 
