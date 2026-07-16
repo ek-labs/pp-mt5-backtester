@@ -1,4 +1,4 @@
-# pp-mt5 · MT5 Backtester CLI
+# pp-mt5-backtester · MT5 Backtester CLI
 
 > Printed by Printing Press — printingpress.dev
 
@@ -45,32 +45,32 @@ go build -o pp-mt5-backtester.exe ./cmd/pp-mt5-backtester
 ## Quick Start
 
 ```powershell
-# Check that pp-mt5 finds your terminal
-pp-mt5 config
+# Check that pp-mt5-backtester finds your terminal
+pp-mt5-backtester config
 
 # Run a backtest on the built-in MACD Sample EA
-pp-mt5 run --ea "MACD Sample" --symbol EURUSD --period H1 --from 2023.01.01 --to 2024.01.01
+pp-mt5-backtester run --ea "MACD Sample" --symbol EURUSD --period H1 --from 2023.01.01 --to 2024.01.01
 
 # Compile your EA first, then run it
-pp-mt5 compile C:\MT5\MQL5\Experts\MyEA.mq5
-pp-mt5 run --ea MyEA --symbol EURUSD --period M15 --model 0
+pp-mt5-backtester compile C:\MT5\MQL5\Experts\MyEA.mq5
+pp-mt5-backtester run --ea MyEA --symbol EURUSD --period M15 --model 0
 
 # Parse a report file you already have
-pp-mt5 report C:\Users\You\AppData\Roaming\MetaQuotes\Terminal\<hash>\tester\MyReport.htm
+pp-mt5-backtester report C:\Users\You\AppData\Roaming\MetaQuotes\Terminal\<hash>\tester\MyReport.htm
 
 # Batch test across multiple symbols
-pp-mt5 template                  # creates batch.json
-pp-mt5 batch --file batch.json
+pp-mt5-backtester template                  # creates batch.json
+pp-mt5-backtester batch --file batch.json
 ```
 
 ---
 
 ## Commands
 
-### `pp-mt5 run` — Run a backtest
+### `pp-mt5-backtester run` — Run a backtest
 
 ```
-pp-mt5 run [flags]
+pp-mt5-backtester run [flags]
 
 Flags:
   --ea string          EA name or path (required)
@@ -97,30 +97,30 @@ Flags:
 **Examples:**
 ```powershell
 # Basic
-pp-mt5 run --ea "MACD Sample" --symbol EURUSD --period H1 --from 2022.01.01 --to 2024.01.01
+pp-mt5-backtester run --ea "MACD Sample" --symbol EURUSD --period H1 --from 2022.01.01 --to 2024.01.01
 
 # Every tick model, custom deposit
-pp-mt5 run --ea MyScalper --symbol GBPUSD --period M5 --model 0 --deposit 50000
+pp-mt5-backtester run --ea MyScalper --symbol GBPUSD --period M5 --model 0 --deposit 50000
 
 # With EA inputs
-pp-mt5 run --ea MyEA --symbol EURUSD --period H4 --input StopLoss=50 --input TakeProfit=150
+pp-mt5-backtester run --ea MyEA --symbol EURUSD --period H4 --input StopLoss=50 --input TakeProfit=150
 
 # Drive inputs from a .set file (saved out of the MT5 strategy tester)
-pp-mt5 run --ea MyEA --symbol EURUSD --set MyEA.set
+pp-mt5-backtester run --ea MyEA --symbol EURUSD --set MyEA.set
 
 # Set file + per-run override (override wins; rest of set file still applied)
-pp-mt5 run --ea MyEA --set MyEA.set --input MagicNumber=99002
+pp-mt5-backtester run --ea MyEA --set MyEA.set --input MagicNumber=99002
 
 # JSON output for scripting
-pp-mt5 run --ea "MACD Sample" --symbol EURUSD --period H1 --from 2023.01.01 --to 2024.01.01 -o json
+pp-mt5-backtester run --ea "MACD Sample" --symbol EURUSD --period H1 --from 2023.01.01 --to 2024.01.01 -o json
 ```
 
 ---
 
-### `pp-mt5 compile` — Compile MQL5 source
+### `pp-mt5-backtester compile` — Compile MQL5 source
 
 ```
-pp-mt5 compile <file.mq5> [flags]
+pp-mt5-backtester compile <file.mq5> [flags]
 
 Flags:
   --inc string   Additional include directory (repeatable)
@@ -128,16 +128,16 @@ Flags:
 
 **Examples:**
 ```powershell
-pp-mt5 compile MyEA.mq5
-pp-mt5 compile "C:\MT5\MQL5\Experts\MyEA.mq5" --inc "C:\MT5\MQL5\Include\MyLib"
+pp-mt5-backtester compile MyEA.mq5
+pp-mt5-backtester compile "C:\MT5\MQL5\Experts\MyEA.mq5" --inc "C:\MT5\MQL5\Include\MyLib"
 ```
 
 ---
 
-### `pp-mt5 report` — Parse a report
+### `pp-mt5-backtester report` — Parse a report
 
 ```
-pp-mt5 report [file.htm] [flags]
+pp-mt5-backtester report [file.htm] [flags]
 
 Flags:
   --dir string   Directory to search for most recent report
@@ -146,18 +146,18 @@ Flags:
 
 **Examples:**
 ```powershell
-pp-mt5 report C:\path\to\report.htm
-pp-mt5 report --dir "C:\Users\You\AppData\Roaming\MetaQuotes\Terminal\<hash>\tester"
-pp-mt5 report report.htm -o json
-pp-mt5 report report.htm -o csv >> results.csv
+pp-mt5-backtester report C:\path\to\report.htm
+pp-mt5-backtester report --dir "C:\Users\You\AppData\Roaming\MetaQuotes\Terminal\<hash>\tester"
+pp-mt5-backtester report report.htm -o json
+pp-mt5-backtester report report.htm -o csv >> results.csv
 ```
 
 ---
 
-### `pp-mt5 batch` — Run multiple backtests
+### `pp-mt5-backtester batch` — Run multiple backtests
 
 ```
-pp-mt5 batch --file batch.json [flags]
+pp-mt5-backtester batch --file batch.json [flags]
 
 Flags:
   --file string      Path to batch JSON file (required)
@@ -224,49 +224,49 @@ Either field can also go in `defaults` to apply across all jobs.
 **Examples:**
 ```powershell
 # Generate a template
-pp-mt5 template
+pp-mt5-backtester template
 
 # Run the batch
-pp-mt5 batch --file batch.json
+pp-mt5-backtester batch --file batch.json
 
 # Save results as CSV
-pp-mt5 batch --file batch.json -o csv > results.csv
+pp-mt5-backtester batch --file batch.json -o csv > results.csv
 
 # JSON for further processing
-pp-mt5 batch --file batch.json -o json | python -m json.tool
+pp-mt5-backtester batch --file batch.json -o json | python -m json.tool
 ```
 
 ---
 
-### `pp-mt5 config` — Show detected paths
+### `pp-mt5-backtester config` — Show detected paths
 
 ```powershell
-pp-mt5 config
+pp-mt5-backtester config
 ```
 
 ---
 
-### `pp-mt5 setfile` — Inspect, generate, and list `.set` files
+### `pp-mt5-backtester setfile` — Inspect, generate, and list `.set` files
 
 ```
-pp-mt5 setfile show <file.set>      # pretty-print params and optimization ranges
-pp-mt5 setfile export --output FILE --input KEY=VAL [--input ...]
-pp-mt5 setfile list                 # all .set files under MQL5\Profiles\Tester\
+pp-mt5-backtester setfile show <file.set>      # pretty-print params and optimization ranges
+pp-mt5-backtester setfile export --output FILE --input KEY=VAL [--input ...]
+pp-mt5-backtester setfile list                 # all .set files under MQL5\Profiles\Tester\
 ```
 
 **Examples:**
 ```powershell
 # Inspect a set file from MQL5\Profiles\Tester\
-pp-mt5 setfile show MyEA.set
+pp-mt5-backtester setfile show MyEA.set
 
 # Or by absolute path
-pp-mt5 setfile show "C:\Users\You\AppData\Roaming\MetaQuotes\Terminal\<hash>\MQL5\Profiles\Tester\MyEA.set"
+pp-mt5-backtester setfile show "C:\Users\You\AppData\Roaming\MetaQuotes\Terminal\<hash>\MQL5\Profiles\Tester\MyEA.set"
 
 # Generate a starter .set from inputs (no optimization ranges)
-pp-mt5 setfile export --output MyEA.set --input StopLoss=50 --input TakeProfit=100 --input MagicNumber=99001
+pp-mt5-backtester setfile export --output MyEA.set --input StopLoss=50 --input TakeProfit=100 --input MagicNumber=99001
 
 # List every .set file MT5 can see
-pp-mt5 setfile list
+pp-mt5-backtester setfile list
 ```
 
 ---
@@ -293,24 +293,24 @@ UseFilter=true
 
 Lines without `||` are simple values (no optimization range). Boolean literals (`true` / `false`) are passed through verbatim. Blank lines and `;` comments are skipped.
 
-### How `pp-mt5` uses set files
+### How `pp-mt5-backtester` uses set files
 
 - `--set FILE` on `run` or `set_file` on a batch job parses the file and emits a proper `[TesterInputs]` block in the generated ini — pipes and Y/N flags preserved.
 - `--input KEY=VALUE` (or per-job `inputs`) **overrides** values from the set file by name. Optimization ranges on the original line are preserved; only the value changes.
-- If the path is not absolute, `pp-mt5` resolves bare filenames against `MQL5\Profiles\Tester\` under every MT5 data folder on the host. With `--portable`, the terminal's own directory is used instead.
+- If the path is not absolute, `pp-mt5-backtester` resolves bare filenames against `MQL5\Profiles\Tester\` under every MT5 data folder on the host. With `--portable`, the terminal's own directory is used instead.
 
 ### Workflow
 
 ```powershell
 # 1. In MT5 Strategy Tester: configure inputs, click "Save" → MyEA.set
 # 2. Inspect
-pp-mt5 setfile show MyEA.set
+pp-mt5-backtester setfile show MyEA.set
 
 # 3. Run with the saved inputs
-pp-mt5 run --ea MyEA --symbol EURUSD --set MyEA.set
+pp-mt5-backtester run --ea MyEA --symbol EURUSD --set MyEA.set
 
 # 4. Batch the same file across symbols, with one override per job
-pp-mt5 batch --file batch.json
+pp-mt5-backtester batch --file batch.json
 ```
 
 ---
@@ -323,7 +323,7 @@ MT5 supports a headless CLI mode via `.ini` configuration files:
 terminal64.exe /config:backtest.ini
 ```
 
-`pp-mt5` generates these ini files, launches the terminal, waits for completion (MT5 exits when `ShutdownTerminal=1`), then finds and parses the HTML report MT5 writes.
+`pp-mt5-backtester` generates these ini files, launches the terminal, waits for completion (MT5 exits when `ShutdownTerminal=1`), then finds and parses the HTML report MT5 writes.
 
 The generated ini looks like this:
 ```ini

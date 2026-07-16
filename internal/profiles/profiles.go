@@ -27,7 +27,9 @@ type Store struct {
 	Default  string              `json:"default"` // name of default profile
 }
 
-// DefaultStorePath returns ~/.pp-mt5/profiles.json
+// DefaultStorePath returns ~/.pp-mt5/profiles.json. The directory name
+// predates the pp-mt5-backtester binary rename and is kept so existing
+// saved profiles keep working.
 func DefaultStorePath() string {
 	home, _ := os.UserHomeDir()
 	return filepath.Join(home, ".pp-mt5", "profiles.json")
@@ -72,11 +74,11 @@ func (s *Store) Get(name string) (*Profile, error) {
 		name = s.Default
 	}
 	if name == "" {
-		return nil, fmt.Errorf("no profile specified and no default set — run: pp-mt5 profile add")
+		return nil, fmt.Errorf("no profile specified and no default set — run: pp-mt5-backtester profile add")
 	}
 	p, ok := s.Profiles[name]
 	if !ok {
-		return nil, fmt.Errorf("profile %q not found — run: pp-mt5 profile list", name)
+		return nil, fmt.Errorf("profile %q not found — run: pp-mt5-backtester profile list", name)
 	}
 	return p, nil
 }
@@ -113,7 +115,7 @@ func (s *Store) SetDefault(name string) error {
 // Print displays all profiles in a table.
 func (s *Store) Print() {
 	if len(s.Profiles) == 0 {
-		fmt.Println("No profiles configured. Run: pp-mt5 profile add --name broker1 --terminal \"C:\\MT5\\terminal64.exe\"")
+		fmt.Println("No profiles configured. Run: pp-mt5-backtester profile add --name broker1 --terminal \"C:\\MT5\\terminal64.exe\"")
 		return
 	}
 
@@ -166,7 +168,7 @@ func WriteServiceScript(s *Store, outPath string) error {
 	}
 	defer f.Close()
 
-	fmt.Fprint(f, `# pp-mt5 — Install MT5 instances as Windows Services via NSSM
+	fmt.Fprint(f, `# pp-mt5-backtester — Install MT5 instances as Windows Services via NSSM
 # Requires NSSM: https://nssm.cc or 'choco install nssm'
 # Run as Administrator
 
@@ -199,7 +201,7 @@ nssm set $svc AppParameters $args
 nssm set $svc Start SERVICE_AUTO_START
 nssm set $svc AppStdout "$env:TEMP\$svc-stdout.log"
 nssm set $svc AppStderr "$env:TEMP\$svc-stderr.log"
-nssm set $svc Description "MetaTrader 5 - %s (pp-mt5 managed)"
+nssm set $svc Description "MetaTrader 5 - %s (pp-mt5-backtester managed)"
 nssm start $svc
 Write-Host "Started: $svc" -ForegroundColor Green
 `, name, svcName, p.TerminalPath, args, p.Description)

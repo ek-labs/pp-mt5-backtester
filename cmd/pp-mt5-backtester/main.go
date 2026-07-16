@@ -39,19 +39,19 @@ var (
 
 func main() {
 	root := &cobra.Command{
-		Use:   "pp-mt5",
+		Use:   "pp-mt5-backtester",
 		Short: "MT5 backtester CLI — run, compile, report, batch, profiles",
-		Long: `pp-mt5 — Printing Press CLI for MetaTrader 5 backtesting
+		Long: `pp-mt5-backtester — Printing Press CLI for MetaTrader 5 backtesting
 
 Run Expert Advisor backtests, compile MQL5, parse reports,
 batch test multiple EAs across symbols/timeframes, manage
 multiple MT5 terminals via named profiles.
 
 Quick start:
-  pp-mt5 profile add --name broker1 --terminal "C:\MT5\terminal64.exe"
-  pp-mt5 run --ea "MACD Sample" --symbol EURUSD --period H1
-  pp-mt5 template && pp-mt5 batch --file batch.json
-  pp-mt5 service install`,
+  pp-mt5-backtester profile add --name broker1 --terminal "C:\MT5\terminal64.exe"
+  pp-mt5-backtester run --ea "MACD Sample" --symbol EURUSD --period H1
+  pp-mt5-backtester template && pp-mt5-backtester batch --file batch.json
+  pp-mt5-backtester service install`,
 		Version: version,
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			if workDir == "" {
@@ -127,7 +127,7 @@ func resolveTerminal(profileName string) (string, bool, error) {
 		return t, false, nil
 	}
 
-	return "", false, fmt.Errorf("no MT5 terminal found — run: pp-mt5 profile add")
+	return "", false, fmt.Errorf("no MT5 terminal found — run: pp-mt5-backtester profile add")
 }
 
 // ── run ──────────────────────────────────────────────────────────────────────
@@ -166,10 +166,10 @@ Tick models:
   4 = Real Ticks       (requires downloaded tick data from broker)
 
 Examples:
-  pp-mt5 run --ea "MACD Sample" --symbol EURUSD --period H1
-  pp-mt5 run --ea MyEA --symbol GBPUSD --period M5 --model 0 --deposit 50000
-  pp-mt5 run --ea MyEA --input StopLoss=50 --input TakeProfit=100
-  pp-mt5 run --ea MyEA --profile broker2 --symbol XAUUSD`,
+  pp-mt5-backtester run --ea "MACD Sample" --symbol EURUSD --period H1
+  pp-mt5-backtester run --ea MyEA --symbol GBPUSD --period M5 --model 0 --deposit 50000
+  pp-mt5-backtester run --ea MyEA --input StopLoss=50 --input TakeProfit=100
+  pp-mt5-backtester run --ea MyEA --profile broker2 --symbol XAUUSD`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if ea == "" {
 				return fmt.Errorf("--ea is required (e.g. --ea \"MACD Sample\")")
@@ -397,19 +397,19 @@ func batchCmd() *cobra.Command {
 		Long: `Run a batch of backtests from a JSON file.
 
 No need to change any .ini file — each job generates its own ini automatically.
-Set defaults once, list your EAs/symbols/periods, and pp-mt5 runs them all.
+Set defaults once, list your EAs/symbols/periods, and pp-mt5-backtester runs them all.
 
 Jobs run sequentially (MT5 limitation: one backtest at a time per terminal).
 Different jobs can target different MT5 terminals via "profile" field.
 
 Examples:
-  pp-mt5 template                        # generate batch.json
-  pp-mt5 batch --file batch.json         # run all jobs
-  pp-mt5 batch --file batch.json -o csv > results.csv
-  pp-mt5 batch --file batch.json -o json`,
+  pp-mt5-backtester template                        # generate batch.json
+  pp-mt5-backtester batch --file batch.json         # run all jobs
+  pp-mt5-backtester batch --file batch.json -o csv > results.csv
+  pp-mt5-backtester batch --file batch.json -o json`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if batchFile == "" {
-				return fmt.Errorf("--file is required (generate one with: pp-mt5 template)")
+				return fmt.Errorf("--file is required (generate one with: pp-mt5-backtester template)")
 			}
 
 			bf, err := batch.LoadBatchFile(batchFile)
@@ -500,9 +500,9 @@ Commands:
 		Long: `Add a named MT5 terminal profile.
 
 Examples:
-  pp-mt5 profile add --name broker1 --terminal "C:\MT5-Broker1\terminal64.exe"
-  pp-mt5 profile add --name broker2 --terminal "C:\MT5-Broker2\terminal64.exe" --portable --default
-  pp-mt5 profile add --name gold-desk --terminal "C:\MT5-XAUUSD\terminal64.exe" --server "Broker-Live"`,
+  pp-mt5-backtester profile add --name broker1 --terminal "C:\MT5-Broker1\terminal64.exe"
+  pp-mt5-backtester profile add --name broker2 --terminal "C:\MT5-Broker2\terminal64.exe" --portable --default
+  pp-mt5-backtester profile add --name gold-desk --terminal "C:\MT5-XAUUSD\terminal64.exe" --server "Broker-Live"`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if addName == "" {
 				return fmt.Errorf("--name is required")
@@ -550,7 +550,7 @@ Examples:
 				fmt.Printf("  Editor:   %s\n", edPath)
 			}
 			fmt.Printf("\nRun a backtest with this profile:\n")
-			fmt.Printf("  pp-mt5 run --profile %s --ea \"MACD Sample\" --symbol EURUSD\n", addName)
+			fmt.Printf("  pp-mt5-backtester run --profile %s --ea \"MACD Sample\" --symbol EURUSD\n", addName)
 			return nil
 		},
 	}
@@ -642,7 +642,7 @@ Commands:
 				return err
 			}
 			if len(store.Profiles) == 0 {
-				return fmt.Errorf("no profiles configured — add one with: pp-mt5 profile add")
+				return fmt.Errorf("no profiles configured — add one with: pp-mt5-backtester profile add")
 			}
 
 			scriptPath := filepath.Join(workDir, "install-services.ps1")
@@ -663,7 +663,7 @@ Commands:
 			fmt.Printf("Or step by step:\n")
 			fmt.Printf("  1. Install NSSM:  choco install nssm\n")
 			fmt.Printf("  2. Run the script above as Administrator\n")
-			fmt.Printf("  3. Check status:  pp-mt5 service list\n")
+			fmt.Printf("  3. Check status:  pp-mt5-backtester service list\n")
 			return nil
 		},
 	})
@@ -719,7 +719,7 @@ func configCmd() *cobra.Command {
 		Use:   "config",
 		Short: "Show detected configuration and paths",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Printf("\n%s\n\n", bold("pp-mt5 Configuration"))
+			fmt.Printf("\n%s\n\n", bold("pp-mt5-backtester Configuration"))
 
 			store, _ := profiles.Load()
 
@@ -729,7 +729,7 @@ func configCmd() *cobra.Command {
 				store.Print()
 				fmt.Println()
 			} else {
-				fmt.Printf("Profiles: none — run: pp-mt5 profile add\n\n")
+				fmt.Printf("Profiles: none — run: pp-mt5-backtester profile add\n\n")
 			}
 
 			// Auto-detect
@@ -775,7 +775,7 @@ func templateCmd() *cobra.Command {
 			}
 			fmt.Printf("%s Template written: %s\n\n", green("✓"), path)
 			fmt.Printf("Edit it, then run:\n")
-			fmt.Printf("  pp-mt5 batch --file %s\n", path)
+			fmt.Printf("  pp-mt5-backtester batch --file %s\n", path)
 		},
 	}
 }
@@ -875,7 +875,7 @@ The output contains one line per input with no optimization range. Use
 optimization ranges in the value||start||step||stop||Y/N form.
 
 Example:
-  pp-mt5 setfile export --output MyEA.set \
+  pp-mt5-backtester setfile export --output MyEA.set \
     --input StopLoss=50 --input TakeProfit=100 --input MagicNumber=99001`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if outPath == "" {

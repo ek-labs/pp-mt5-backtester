@@ -42,7 +42,7 @@
 
     // ── Different broker terminal ────────────────────────────────────────────
     // "profile" points to a different MT5 install registered via:
-    //   pp-mt5 profile add --name broker2 --terminal "C:\MT5-Broker2\terminal64.exe"
+    //   pp-mt5-backtester profile add --name broker2 --terminal "C:\MT5-Broker2\terminal64.exe"
     {
       "ea":      "MyEA",
       "symbol":  "XAUUSD",
@@ -52,7 +52,7 @@
     },
 
     // ── Set file drives the inputs ──────────────────────────────────────────
-    // The .set file lives in MQL5\Profiles\Tester\ — pp-mt5 will resolve a
+    // The .set file lives in MQL5\Profiles\Tester\ — pp-mt5-backtester will resolve a
     // bare filename. Optimization ranges (value||start||step||stop||Y/N) in
     // the file are preserved when written into [TesterInputs].
     {
